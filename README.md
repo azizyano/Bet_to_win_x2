@@ -1,8 +1,5 @@
+THANKS FOR HARMONY TEAM FOR THIS DEMO https://github.com/harmony-one/token-faucet-demo-dapp 
 
-About
-A game project: 
-to start 
-clonethis repo.
 # Bet_to_win_x2 dApp on Harmony
 
 This repo contains a simple Game dApp.the minimun bet is 1usd of ONE. we used Band chain to call ONE/USD price. 50% chance win/lose.
