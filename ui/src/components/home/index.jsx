@@ -202,11 +202,26 @@ class Home extends Component {
     let contract = hmy.contracts.createContract(contractJson.abi, config.addresses.hg);
     contract = wallet.attachToContract(contract)
     var randomSeed = Math.floor(Math.random() * Math.floor(1e9))
-    
+    const amountToWie = amount * 10**18;
+    (function(abi, addr) {
+      const hmy_ws = new Harmony("wss://ws.s0.b.hmny.io", {
+        chainType: ChainType.Harmony,
+        chainId: ChainID.HmyTestnet,
+      })
+      let contractevent = hmy_ws.contracts.createContract(contractJson.abi, config.addresses.hg)
+      contractevent.events.Result().on("data", (event) => {
+        const verdict = event.returnValues.winAmount 
+        const winamount = verdict / 10**18
+        console.log(winamount)
+        if(verdict === '0') {
+          window.alert('lose :(')
+        } else {
+          window.alert("you win", winamount, "one")
+        }
+      })
+    })(contractJson.abi, config.addresses.hg);
     this.setState({ snackbarMessage: null, snackbarType: null, loading: true })
-    const amountToWie = amount * 10**18
     await contract.methods.game(bet, randomSeed).send({gasPrice: 1000000000, gasLimit: 210000, value: amountToWie })
-    
     .then((res) => {
       if (res.status === 'called' || res.status === 'call') {
         const url = `${hmy.explorerUrl}/tx/${res.transaction.receipt.transactionHash}`
